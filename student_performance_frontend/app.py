@@ -8,6 +8,7 @@ from ui_components import section_header, set_global_style
 
 
 st.set_page_config(page_title="Student Performance Predictor", page_icon="📚", layout="wide")
+set_global_style()
 # Initialize page state
 if 'page' not in st.session_state:
     st.session_state.page = "Study Habits"
