@@ -1,6 +1,11 @@
 import streamlit as st
 
-from ui_components import section_header, set_global_style
+# Use explicit absolute imports so Streamlit deployment works the same as local
+from student_performance_api.student_performance_frontend.ui_components import (
+    section_header,
+    set_global_style,
+)
+
 
 st.set_page_config(page_title="Student Performance Predictor", page_icon="📚", layout="wide")
 set_global_style()
@@ -28,6 +33,8 @@ if st.sidebar.button("🎯 Predict", use_container_width=True):
     navigate_to("Predict")
 
 # Page content based on session state
+# Render the page based on session_state.page
+# (Fallback added so deployed environment never renders a blank page)
 if st.session_state.page == "Study Habits":
     section_header("📖 Study Habits", "How much time the student studies each week")
 
@@ -138,7 +145,9 @@ elif st.session_state.page == "Background & Method":
 
 elif st.session_state.page == "Predict":
     section_header("🎯 Predict Overall Score", "Model prediction from your entered profile")
-    from utils import call_prediction_api
+
+    # Absolute import to avoid module-resolution issues after deployment
+    from student_performance_api.student_performance_frontend.utils import call_prediction_api
 
     # Preview card
     with st.container():
@@ -205,3 +214,8 @@ elif st.session_state.page == "Predict":
             if st.button("🔄 Start Over", use_container_width=True):
                 st.session_state.clear()
                 st.rerun()
+
+else:
+    # Absolute fallback (prevents blank page if session_state.page becomes unexpected)
+    st.session_state.page = "Study Habits"
+    st.rerun()
