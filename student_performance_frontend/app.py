@@ -8,11 +8,11 @@ from ui_components import section_header, set_global_style
 
 
 st.set_page_config(page_title="Student Performance Predictor", page_icon="📚", layout="wide")
-set_global_style()
 st.write("Current Page:", st.session_state.get("page"))
 # Initialize page state
 if 'page' not in st.session_state:
     st.session_state.page = "Study Habits"
+st.write("Current Page:", st.session_state.get("page"))
 
 # Navigation function
 def navigate_to(page):
@@ -24,13 +24,13 @@ def navigate_to(page):
 st.sidebar.title("📋 Navigation")
 st.sidebar.markdown("<div style='color: rgba(255,255,255,0.9); font-weight:700; margin-top:6px;'>Build a quick student profile, then predict.</div>", unsafe_allow_html=True)
 
-if st.sidebar.button("📖 Study Habits", use_container_width=True):
+if st.sidebar.button("📖 Study Habits", use_container_width=True, key="sidebar_study"):
     navigate_to("Study Habits")
-if st.sidebar.button("📊 Subject Scores", use_container_width=True):
+if st.sidebar.button("📊 Subject Scores", use_container_width=True, key="sidebar_subject"):
     navigate_to("Subject Scores")
-if st.sidebar.button("👤 Background & Method", use_container_width=True):
+if st.sidebar.button("👤 Background & Method", use_container_width=True, key="sidebar_background"):
     navigate_to("Background & Method")
-if st.sidebar.button("🎯 Predict", use_container_width=True):
+if st.sidebar.button("🎯 Predict", use_container_width=True, key="sidebar_predict"):
     navigate_to("Predict")
 
 # Page content based on session state
@@ -63,7 +63,12 @@ if st.session_state.page == "Study Habits":
     st.divider()
     c1, c2 = st.columns([1, 3])
     with c1:
-        if st.button("Next →", type="primary", use_container_width=True):
+        if st.button(
+            "Next →",
+            type="primary",
+            use_container_width=True,
+            key="study_next"
+        ):
             navigate_to("Subject Scores")
 
 elif st.session_state.page == "Subject Scores":
@@ -98,10 +103,19 @@ elif st.session_state.page == "Subject Scores":
     st.divider()
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Back", use_container_width=True):
+        if st.button(
+            "← Back",
+            use_container_width=True,
+            key="subject_back"
+        ):
             navigate_to("Study Habits")
     with col2:
-        if st.button("Next →", type="primary", use_container_width=True):
+        if st.button(
+            "Next →",
+            type="primary",
+            use_container_width=True,
+            key="subject_next"
+        ):
             navigate_to("Background & Method")
 
 elif st.session_state.page == "Background & Method":
@@ -138,10 +152,19 @@ elif st.session_state.page == "Background & Method":
     st.divider()
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("← Back", use_container_width=True):
+        if st.button(
+            "← Back",
+            use_container_width=True,
+            key="background_back"
+        ):
             navigate_to("Subject Scores")
     with col2:
-        if st.button("Next →", type="primary", use_container_width=True):
+        if st.button(
+            "Next →",
+            type="primary",
+            use_container_width=True,
+            key="background_next"
+        ):
             navigate_to("Predict")
 
 elif st.session_state.page == "Predict":
@@ -178,7 +201,7 @@ elif st.session_state.page == "Predict":
 
     st.divider()
 
-    if st.button("🔮 Predict", type="primary", use_container_width=True):
+    if st.button("🔮 Predict", type="primary", use_container_width=True, key="predict_btn"):
         data = {
             "study_hours": st.session_state.get('study_hours', 20),
             "math_score": st.session_state.get('math_score', 85),
@@ -212,7 +235,7 @@ elif st.session_state.page == "Predict":
                 else:
                     st.error(f"📈 Confidence Score: {conf:.2f}% - Low Confidence 🔴")
 
-            if st.button("🔄 Start Over", use_container_width=True):
+            if st.button("🔄 Start Over", use_container_width=True,key="restart_btn"):
                 st.session_state.clear()
                 st.rerun()
 
