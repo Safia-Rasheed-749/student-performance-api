@@ -1,10 +1,10 @@
 import streamlit as st
 
-# Use explicit absolute imports so Streamlit deployment works the same as local
-from student_performance_api.student_performance_frontend.ui_components import (
-    section_header,
-    set_global_style,
-)
+# Local/deployed friendly imports:
+# - On Streamlit Cloud, the app root is usually `student_performance_frontend/`,
+#   so `ui_components.py` and `utils.py` must be importable as top-level modules.
+from ui_components import section_header, set_global_style
+
 
 
 st.set_page_config(page_title="Student Performance Predictor", page_icon="📚", layout="wide")
@@ -146,8 +146,8 @@ elif st.session_state.page == "Background & Method":
 elif st.session_state.page == "Predict":
     section_header("🎯 Predict Overall Score", "Model prediction from your entered profile")
 
-    # Absolute import to avoid module-resolution issues after deployment
-    from student_performance_api.student_performance_frontend.utils import call_prediction_api
+    # Top-level import (works when Streamlit root is `student_performance_frontend/`)
+    from utils import call_prediction_api
 
     # Preview card
     with st.container():
