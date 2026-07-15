@@ -216,6 +216,16 @@ elif st.session_state.page == "Predict":
                 st.rerun()
 
 else:
-    # Absolute fallback (prevents blank page if session_state.page becomes unexpected)
+    # Safe fallback without triggering another rerun (prevents navigation break on Streamlit Cloud)
     st.session_state.page = "Study Habits"
-    st.rerun()
+    section_header("📖 Study Habits", "How much time the student studies each week")
+    left, right = st.columns([2, 1])
+    with left:
+        st.session_state.study_hours = st.number_input(
+            "Weekly Study Hours (0–40)",
+            min_value=0,
+            max_value=40,
+            value=st.session_state.get('study_hours', 20),
+            step=1,
+        )
+
