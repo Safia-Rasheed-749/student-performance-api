@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from .models import StudentPerformanceInput, PredictionResponse
-from .utils import load_model_and_preprocessor, preprocess_input, predict
+from .utils import load_model_and_preprocessor, preprocess_input, predict_with_confidence
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -57,13 +57,15 @@ def predict_score(student_data: StudentPerformanceInput):
         processed_input = preprocess_input(input_dict)
         
         # 3. Make prediction
-        prediction = predict(processed_input)
-        
+        # 3. Make prediction with confidence
+        prediction, confidence = predict_with_confidence(processed_input)
+
         # 4. Return response
         return PredictionResponse(
-            predicted_score=round(prediction, 2),
-            confidence_score=93.74,  # Your model's R² score
-            message="Prediction successful!"
+            predicted_score=prediction,
+            confidence_score=confidence,  # for Dynamic confidence 
+            message="Prediction successful!",
+            input_received=input_dict
         )
     
     except KeyError as e:

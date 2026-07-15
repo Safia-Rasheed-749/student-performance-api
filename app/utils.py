@@ -44,3 +44,23 @@ def predict(processed_input) -> float:
     score = prediction[0]
     # Clip to valid range
     return max(0, min(100, score))  # 0 se 100 ke beech mein rakhein
+def predict_with_confidence(processed_input):
+    """
+    Predict score and calculate confidence based on prediction stability.
+    """
+    global model
+    
+    # 1. Make prediction
+    prediction = model.predict(processed_input)[0]
+    prediction = max(0, min(100, prediction))
+
+    
+    # 2. Calculate confidence (dynamic)
+    # For now, we'll use a simple method: 
+    # Confidence based on how far the prediction is from 0-100 range
+    # Closer to middle (50) = higher confidence, extremes = lower confidence
+    distance_from_middle = abs(prediction - 50) / 50  # 0 to 1
+    confidence = 100 - (distance_from_middle * 30)  # Reduce confidence for extremes
+    confidence = max(70, min(98, confidence))  # Keep between 70-98%
+    
+    return round(prediction, 2), round(confidence, 2)

@@ -14,5 +14,6 @@ class StudentPerformanceInput(BaseModel):
 class PredictionResponse(BaseModel):
     """Response model for prediction endpoint."""
     predicted_score: float
-    confidence_score: float  # R² score as confidence percentage
+    confidence_score: Optional[float] = None  # optional confidence
     message: str
+    input_received: dict
