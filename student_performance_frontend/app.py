@@ -16,6 +16,7 @@ if 'page' not in st.session_state:
 
 # Navigation function
 def navigate_to(page):
+    # Streamlit Cloud navigation stability: update state + rerun
     st.session_state.page = page
     st.rerun()
 
