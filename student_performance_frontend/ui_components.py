@@ -27,12 +27,11 @@ def pill(label: str, value: str):
 
 
 def set_global_style():
-    # Avoid calling markdown repeatedly in environments that may trigger reruns
-    # during startup; keep this as a single, cached operation.
-    if st.session_state.get("_global_style_applied"):
-        return
+    # Streamlit Cloud can trigger multiple script reruns during startup.
+    # Guard to prevent the RecursionError, but still ensure the CSS is injected.
+    if not st.session_state.get("_global_style_applied"):
+        st.markdown(
 
-    st.markdown(
         """
         <style>
             /* App background */

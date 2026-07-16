@@ -23,14 +23,20 @@ def navigate_to(page):
 st.sidebar.title("📋 Navigation")
 st.sidebar.markdown("<div style='color: rgba(255,255,255,0.9); font-weight:700; margin-top:6px;'>Build a quick student profile, then predict.</div>", unsafe_allow_html=True)
 
-if st.sidebar.button("📖 Study Habits", use_container_width=True, key="sidebar_study"):
-    navigate_to("Study Habits")
-if st.sidebar.button("📊 Subject Scores", use_container_width=True, key="sidebar_subject"):
-    navigate_to("Subject Scores")
-if st.sidebar.button("👤 Background & Method", use_container_width=True, key="sidebar_background"):
-    navigate_to("Background & Method")
-if st.sidebar.button("🎯 Predict", use_container_width=True, key="sidebar_predict"):
-    navigate_to("Predict")
+# Use radio instead of multiple sidebar buttons to avoid deployed rerun/widget-tree glitches.
+page_options = ["Study Habits", "Subject Scores", "Background & Method", "Predict"]
+selected_page = st.sidebar.radio(
+    "Go to section",
+    page_options,
+    index=page_options.index(st.session_state.page) if st.session_state.page in page_options else 0,
+    key="sidebar_page_radio",
+)
+
+
+if selected_page != st.session_state.page:
+    st.session_state.page = selected_page
+    st.rerun()
+
 
 # Page content based on session state
 # Render the page based on session_state.page
