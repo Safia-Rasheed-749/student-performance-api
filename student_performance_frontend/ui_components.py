@@ -27,21 +27,6 @@ def pill(label: str, value: str):
 
 
 def set_global_style():
-    # Streamlit Cloud can trigger multiple script reruns during startup.
-    # Inject CSS once per session.
-    # This avoids the Streamlit Cloud startup RecursionError.
-    # However, we DO want CSS to be present reliably after reruns.
-    # Streamlit Cloud can rebuild parts of the page tree; so we inject CSS
-    # on each run, but we guard against recursion by writing the marker
-    # before calling st.markdown.
-    # if st.session_state.get("_global_style_in_progress"):
-    #     return
-
-    # if not st.session_state.get("_global_style_applied"):
-    #     st.session_state["_global_style_applied"] = True
-
-    # st.session_state["_global_style_in_progress"] = True
-
     st.markdown(
 
         """
@@ -86,6 +71,5 @@ def set_global_style():
         unsafe_allow_html=True,
     )
 
-    # st.session_state["_global_style_applied"] = True
 
 

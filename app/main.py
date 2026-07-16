@@ -50,17 +50,16 @@ def health_check():
 @app.post("/predict", response_model=PredictionResponse)
 def predict_score(student_data: StudentPerformanceInput):
     try:
-        # 1. Convert input to dict
+        # Convert input to dict
         input_dict = student_data.dict()
         
-        # 2. Preprocess input
+        # Preprocess input
         processed_input = preprocess_input(input_dict)
         
-        # 3. Make prediction
-        # 3. Make prediction with confidence
+        # Make prediction with confidence
         prediction, confidence = predict_with_confidence(processed_input)
 
-        # 4. Return response
+        #  Return response
         return PredictionResponse(
             predicted_score=prediction,
             confidence_score=confidence,  # for Dynamic confidence 

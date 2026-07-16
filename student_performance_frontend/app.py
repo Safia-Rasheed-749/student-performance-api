@@ -1,29 +1,20 @@
 import streamlit as st
-
-# Local/deployed friendly imports:
-# - On Streamlit Cloud, the app root is usually `student_performance_frontend/`,
-#   so `ui_components.py` and `utils.py` must be importable as top-level modules.
 from ui_components import section_header, set_global_style
 
 
 
 st.set_page_config(page_title="Student Performance Predictor", page_icon="📚", layout="wide")
 set_global_style()
-# Initialize page state
 if 'page' not in st.session_state:
     st.session_state.page = "Study Habits"
 
-# Navigation function
 def navigate_to(page):
-    # Streamlit Cloud navigation stability: update state + rerun
     st.session_state.page = page
     st.rerun()
 
-# Sidebar navigation
 st.sidebar.title("📋 Navigation")
 st.sidebar.markdown("<div style='color: rgba(255,255,255,0.9); font-weight:700; margin-top:6px;'>Build a quick student profile, then predict.</div>", unsafe_allow_html=True)
 
-# Use radio instead of multiple sidebar buttons to avoid deployed rerun/widget-tree glitches.
 page_options = ["Study Habits", "Subject Scores", "Background & Method", "Predict"]
 selected_page = st.sidebar.radio(
     "Go to section",
@@ -37,21 +28,17 @@ if selected_page != st.session_state.page:
     st.session_state.page = selected_page
     st.rerun()
 
-
-# Page content based on session state
-# Render the page based on session_state.page
-# (Fallback added so deployed environment never renders a blank page)
 if st.session_state.page == "Study Habits":
-    section_header("📖 Study Habits", "How much time the student studies each week")
+    section_header("📖 Study Habits", "How much time the student studies")
 
     left, right = st.columns([2, 1])
     with left:
         st.session_state.study_hours = st.number_input(
-            "Weekly Study Hours (0–40)",
-            min_value=0,
-            max_value=40,
-            value=st.session_state.get('study_hours', 20),
-            step=1,
+            "Weekly Study Hours (0–8.0)",
+            min_value=0.0,
+            max_value=8.0,
+            value=st.session_state.get('study_hours', 8.0),
+            step=0.1, 
             key="study_hours_input",
         )
 
@@ -85,30 +72,30 @@ elif st.session_state.page == "Subject Scores":
     with col1:
         st.session_state.math_score = st.number_input(
             "Math Score (0–100)",
-            min_value=0,
-            max_value=100,
-            value=st.session_state.get('math_score', 85),
-            step=1,
+            min_value=0.0,
+            max_value=100.0,
+            value=st.session_state.get('math_score', 85.0),
+            step=0.1,
             key="math_score_input",
         )
 
     with col2:
         st.session_state.science_score = st.number_input(
             "Science Score (0–100)",
-            min_value=0,
-            max_value=100,
-            value=st.session_state.get('science_score', 82),
-            step=1,
+            min_value=0.0,
+            max_value=100.0,
+            value=st.session_state.get('science_score', 82.0),
+            step=0.1,
             key="science_score_input",
         )
 
     with col3:
         st.session_state.english_score = st.number_input(
             "English Score (0–100)",
-            min_value=0,
-            max_value=100,
-            value=st.session_state.get('english_score', 88),
-            step=1,
+            min_value=0.0,
+            max_value=100.0,
+            value=st.session_state.get('english_score', 88.0),
+            step=0.1, 
             key="english_score_input",
         )
 
@@ -192,7 +179,6 @@ elif st.session_state.page == "Predict":
     # Top-level import (works when Streamlit root is `student_performance_frontend/`)
     from utils import call_prediction_api
 
-    # Preview card
     with st.container():
         st.markdown(
             """
@@ -207,10 +193,10 @@ elif st.session_state.page == "Predict":
                 </div>
             </div>
             """.format(
-                study_hours=st.session_state.get('study_hours', 20),
-                math_score=st.session_state.get('math_score', 85),
-                science_score=st.session_state.get('science_score', 82),
-                english_score=st.session_state.get('english_score', 88),
+                study_hours=st.session_state.get('study_hours', 20.0),
+                math_score=st.session_state.get('math_score', 85.0),
+                science_score=st.session_state.get('science_score', 82.0),
+                english_score=st.session_state.get('english_score', 88.0),
                 parent_education=st.session_state.get('parent_education', 'graduate'),
                 travel_time=st.session_state.get('travel_time', '<15 min'),
                 study_method=st.session_state.get('study_method', 'online videos'),
@@ -222,10 +208,10 @@ elif st.session_state.page == "Predict":
 
     if st.button("🔮 Predict", type="primary", use_container_width=True, key="predict_btn"):
         data = {
-            "study_hours": st.session_state.get('study_hours', 20),
-            "math_score": st.session_state.get('math_score', 85),
-            "science_score": st.session_state.get('science_score', 82),
-            "english_score": st.session_state.get('english_score', 88),
+            "study_hours": st.session_state.get('study_hours', 20.0),
+            "math_score": st.session_state.get('math_score', 85.0),
+            "science_score": st.session_state.get('science_score', 82.0),
+            "english_score": st.session_state.get('english_score', 88.0),
             "parent_education": st.session_state.get('parent_education', 'graduate'),
             "travel_time": st.session_state.get('travel_time', '<15 min'),
             "study_method": st.session_state.get('study_method', 'online videos'),
@@ -261,14 +247,14 @@ elif st.session_state.page == "Predict":
 else:
     # Safe fallback without triggering another rerun (prevents navigation break on Streamlit Cloud)
     st.session_state.page = "Study Habits"
-    section_header("📖 Study Habits", "How much time the student studies each week")
+    section_header("📖 Study Habits", "How much time the student studies")
     left, right = st.columns([2, 1])
     with left:
         st.session_state.study_hours = st.number_input(
-            "Weekly Study Hours (0–40)",
-            min_value=0,
-            max_value=40,
-            value=st.session_state.get('study_hours', 20),
-            step=1,
+            "Weekly Study Hours (0–8.0)",
+            min_value=0.0,
+            max_value=40.0,
+            value=st.session_state.get('study_hours', 20.0),
+            step=0.1, 
         )
 
