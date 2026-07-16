@@ -27,6 +27,11 @@ def pill(label: str, value: str):
 
 
 def set_global_style():
+    # Avoid calling markdown repeatedly in environments that may trigger reruns
+    # during startup; keep this as a single, cached operation.
+    if st.session_state.get("_global_style_applied"):
+        return
+
     st.markdown(
         """
         <style>
@@ -44,7 +49,7 @@ def set_global_style():
                 padding: 8px 14px;
             }
 
-            /* Next buttons (primary) */
+            /* Primary buttons */
             div.stButton > button[kind="primary"], div.stButton > button[data-testid="baseButton-primary"] {
                 background-color: #0B3D91 !important;
                 border-color: #0B3D91 !important;
@@ -55,7 +60,6 @@ def set_global_style():
                 background-color: #083066 !important;
                 border-color: #083066 !important;
             }
-
 
             /* Inputs */
             div[data-baseweb="input"] > div { border-radius: 12px; }
@@ -69,4 +73,7 @@ def set_global_style():
         """,
         unsafe_allow_html=True,
     )
+
+    st.session_state["_global_style_applied"] = True
+
 
