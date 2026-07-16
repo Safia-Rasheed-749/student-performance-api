@@ -46,7 +46,9 @@ if st.session_state.page == "Study Habits":
             max_value=40,
             value=st.session_state.get('study_hours', 20),
             step=1,
+            key="study_hours_input",
         )
+
 
     with right:
         st.markdown(
@@ -81,7 +83,9 @@ elif st.session_state.page == "Subject Scores":
             max_value=100,
             value=st.session_state.get('math_score', 85),
             step=1,
+            key="math_score_input",
         )
+
     with col2:
         st.session_state.science_score = st.number_input(
             "Science Score (0–100)",
@@ -89,7 +93,9 @@ elif st.session_state.page == "Subject Scores":
             max_value=100,
             value=st.session_state.get('science_score', 82),
             step=1,
+            key="science_score_input",
         )
+
     with col3:
         st.session_state.english_score = st.number_input(
             "English Score (0–100)",
@@ -97,7 +103,9 @@ elif st.session_state.page == "Subject Scores":
             max_value=100,
             value=st.session_state.get('english_score', 88),
             step=1,
+            key="english_score_input",
         )
+
 
     st.divider()
     col1, col2 = st.columns(2)
@@ -129,24 +137,30 @@ elif st.session_state.page == "Background & Method":
         parent_options,
         index=parent_options.index(st.session_state.get('parent_education', 'graduate'))
         if st.session_state.get('parent_education', 'graduate') in parent_options
-        else parent_options.index('graduate')
+        else parent_options.index('graduate'),
+        key="parent_education_select",
     )
+
 
     st.session_state.travel_time = st.selectbox(
         "Travel Time",
         travel_options,
         index=travel_options.index(st.session_state.get('travel_time', '<15 min'))
         if st.session_state.get('travel_time', '<15 min') in travel_options
-        else 0
+        else 0,
+        key="travel_time_select",
     )
+
 
     st.session_state.study_method = st.selectbox(
         "Study Method",
         method_options,
         index=method_options.index(st.session_state.get('study_method', 'online videos'))
         if st.session_state.get('study_method', 'online videos') in method_options
-        else 0
+        else 0,
+        key="study_method_select",
     )
+
 
     st.divider()
     col1, col2 = st.columns(2)
